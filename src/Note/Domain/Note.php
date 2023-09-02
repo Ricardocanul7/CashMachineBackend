@@ -21,7 +21,7 @@ class Note {
     /**
      * Get the value of value
      */ 
-    public function getValue()
+    public function getValue(): int
     {
         return $this->value;
     }
@@ -31,7 +31,7 @@ class Note {
      *
      * @return  self
      */ 
-    public function setValue($value)
+    public function setValue($value): Note
     {
         if(self::checkAvailableValue($value)){
             $this->$value = $value;
