@@ -21,8 +21,7 @@ class FillCashMachineCommand extends Command
             ->addArgument(
                 'amount',
                 InputArgument::REQUIRED
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

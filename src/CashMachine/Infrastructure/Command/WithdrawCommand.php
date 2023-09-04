@@ -2,6 +2,7 @@
 
 namespace App\CashMachine\Infrastructure\Command;
 
+use App\CashMachine\Application\Withdraw;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,21 +16,29 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class WithdrawCommand extends Command
 {
+    private $withdrawService;
+
+    public function __construct(Withdraw $withdrawService)
+    {
+        parent::__construct();
+        $this->withdrawService = $withdrawService;
+    }
+
     protected function configure(): void
     {
         $this
             ->addArgument(
                 'amount',
                 InputArgument::REQUIRED
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /**
-         * TODO: place logic here
-         */
+        $result = $this->withdrawService->__invoke($input->getArgument('amount'));
+
+        $output->writeln($result);
+
         return Command::SUCCESS;
     }
 }

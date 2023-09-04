@@ -2,25 +2,26 @@
 
 namespace App\Note\Domain;
 
-use NoteUnavailableException;
+use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 
-class Note {
+class Note
+{
     private int $value;
     const AVAILABLE_NOTES = [10, 20, 50, 100];
 
-    public function __construct(int $value) 
+    public function __construct(int $value)
     {
-        if(self::checkAvailableValue($value)){
-            $this->$value = $value;
+        if (!self::checkAvailableValue($value)) {
+            throw new NoteUnavailableException();
         }
 
-        throw new NoteUnavailableException();
+        $this->value = $value;
     }
 
 
     /**
      * Get the value of value
-     */ 
+     */
     public function getValue(): int
     {
         return $this->value;
@@ -30,11 +31,11 @@ class Note {
      * Set the value of value
      *
      * @return  self
-     */ 
+     */
     public function setValue($value): Note
     {
-        if(self::checkAvailableValue($value)){
-            $this->$value = $value;
+        if (self::checkAvailableValue($value)) {
+            $this->value = $value;
 
             return $this;
         }
@@ -45,5 +46,10 @@ class Note {
     public static function checkAvailableValue($value): bool
     {
         return in_array($value, self::AVAILABLE_NOTES);
+    }
+
+    public function __toString(): string
+    {
+        return strval($this->value);
     }
 }
