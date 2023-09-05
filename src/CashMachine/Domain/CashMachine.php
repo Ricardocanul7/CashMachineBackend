@@ -38,7 +38,7 @@ class CashMachine
         $withdrawNotesCount = $this->getNoteCount($notes);
         $availableNotesCount = $this->getNoteCount($this->notes);
 
-        if(!$this->areEnoughNotesAvailable($withdrawNotesCount, $availableNotesCount)){
+        if (!$this->areEnoughNotesAvailable($withdrawNotesCount, $availableNotesCount)) {
             throw new NoteUnavailableException();
         }
 
@@ -54,7 +54,7 @@ class CashMachine
     {
         $tempAvailableNotesForRemoval = $this->notes;
 
-        foreach($notes as $note){
+        foreach ($notes as $note) {
             $keyRemoval = array_search($note, $tempAvailableNotesForRemoval);
             unset($tempAvailableNotesForRemoval[$keyRemoval]);
         }
@@ -67,8 +67,8 @@ class CashMachine
 
     private function areEnoughNotesAvailable(array $withdrawNotesCount, array $availableNotesCount): bool
     {
-        foreach($withdrawNotesCount as $noteValue => $noteCount){
-            if($availableNotesCount[$noteValue] < $noteCount){
+        foreach ($withdrawNotesCount as $noteValue => $noteCount) {
+            if ($availableNotesCount[$noteValue] < $noteCount) {
                 return false;
             }
         }
@@ -81,7 +81,7 @@ class CashMachine
      */
     private function getNoteCount(array $notes): array
     {
-        $noteValues = array_map(fn($item) => $item->getValue(), $notes);
+        $noteValues = array_map(fn ($item) => $item->getValue(), $notes);
         return array_count_values($noteValues);
     }
 }

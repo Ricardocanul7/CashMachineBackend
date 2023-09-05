@@ -10,7 +10,6 @@ use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 class Withdraw
 {
     public function __construct(
-        private CashMachine $cashMachine,
         private NoteFactory $noteFactory,
     ) {
     }
@@ -18,17 +17,15 @@ class Withdraw
     /**
      * @return Note[]
      */
-    public function __invoke(int $amount): array
+    public function __invoke(int $amount, CashMachine $cashMachine): array
     {
-        $this->prepareCashMachine();
-
-        if(empty($amount)){
+        if (empty($amount)) {
             return [];
         }
 
         $notesToWithdraw = $this->computeNotesToWithdraw($amount);
 
-        return $this->cashMachine->removeNotes($notesToWithdraw);
+        return $cashMachine->removeNotes($notesToWithdraw);
     }
 
     /**
@@ -63,16 +60,5 @@ class Withdraw
         }
 
         return $notesToWithdraw;
-    }
-
-    // Temporal method to fill the cash machine
-    private function prepareCashMachine(): void
-    {
-        $noteAmountPerValue = 10;
-
-        foreach (Note::AVAILABLE_NOTES as $noteValueue) {
-            $notes = $this->noteFactory->create($noteValueue, $noteAmountPerValue);
-            $this->cashMachine->addNotes($notes);
-        }
     }
 }
