@@ -7,7 +7,9 @@ Develop a solution that simulate the delivery of notes when a client does a with
 
 ### The basic requirements are the follow:
 
-Always deliver the lowest number of possible notes; It's possible to get the amount requested with available notes; The client balance is infinite; Amount of notes is 10 for each note; Each withdrawal reduces the number of notes. Available notes $ 100,00; $ 50,00; $ 20,00 , $ 10,00
+Always deliver the lowest number of possible notes; It's possible to get the amount requested with available notes; The client balance is infinite; Amount of notes is 10 for each note; Each withdrawal reduces the number of notes. 
+
+Available notes $ 100,00; $ 50,00; $ 20,00 , $ 10,00
 
 Example:
 
