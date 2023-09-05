@@ -8,7 +8,7 @@ use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 class CashMachine
 {
     /** @var Note[] $notes */
-    private array $notes;
+    private array $notes = [];
 
     public function addNote(Note $note): void
     {
@@ -17,9 +17,7 @@ class CashMachine
 
     public function addNotes(array $notes): void
     {
-        foreach ($notes as $note) {
-            $this->notes[] = $note;
-        }
+        $this->notes = array_merge($this->notes, $notes);
     }
 
     /**
@@ -33,12 +31,57 @@ class CashMachine
     }
 
     /**
-     * Remove available notes in ATM, if not available notes, throw an exception
-     * if the operation is successful return the original notes to withdraw
+     * @param Note[] $notes
      */
-    public function withdrawNotes(array $notes): array
+    public function removeNotes(array $notes): array
     {
-        // TODO: Put logic here
-        return [];
+        $withdrawNotesCount = $this->getNoteCount($notes);
+        $availableNotesCount = $this->getNoteCount($this->notes);
+
+        if(!$this->areEnoughNotesAvailable($withdrawNotesCount, $availableNotesCount)){
+            throw new NoteUnavailableException();
+        }
+
+        $this->persitNotesRemoval($notes);
+
+        return $notes;
+    }
+
+    /**
+     * @param Note[] $notes
+     */
+    private function persitNotesRemoval(array $notes): void
+    {
+        $tempAvailableNotesForRemoval = $this->notes;
+
+        foreach($notes as $note){
+            $keyRemoval = array_search($note, $tempAvailableNotesForRemoval);
+            unset($tempAvailableNotesForRemoval[$keyRemoval]);
+        }
+
+        // Uncomment to watch if notes are removed correctly
+        // var_dump($this->getNoteCount($tempAvailableNotesForRemoval));
+
+        $this->notes = $tempAvailableNotesForRemoval;
+    }
+
+    private function areEnoughNotesAvailable(array $withdrawNotesCount, array $availableNotesCount): bool
+    {
+        foreach($withdrawNotesCount as $noteValue => $noteCount){
+            if($availableNotesCount[$noteValue] < $noteCount){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Note[] $notes
+     */
+    private function getNoteCount(array $notes): array
+    {
+        $noteValues = array_map(fn($item) => $item->getValue(), $notes);
+        return array_count_values($noteValues);
     }
 }

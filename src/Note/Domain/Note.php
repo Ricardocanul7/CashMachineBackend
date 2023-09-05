@@ -3,8 +3,9 @@
 namespace App\Note\Domain;
 
 use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
+use JsonSerializable;
 
-class Note
+class Note implements JsonSerializable
 {
     private int $value;
     const AVAILABLE_NOTES = [10, 20, 50, 100];
@@ -27,22 +28,6 @@ class Note
         return $this->value;
     }
 
-    /**
-     * Set the value of value
-     *
-     * @return  self
-     */
-    public function setValue($value): Note
-    {
-        if (self::checkAvailableValue($value)) {
-            $this->value = $value;
-
-            return $this;
-        }
-
-        throw new NoteUnavailableException();
-    }
-
     public static function checkAvailableValue($value): bool
     {
         return in_array($value, self::AVAILABLE_NOTES);
@@ -51,5 +36,10 @@ class Note
     public function __toString(): string
     {
         return strval($this->value);
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->value;
     }
 }
