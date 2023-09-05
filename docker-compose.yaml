@@ -31,26 +31,6 @@ services:
     networks:
       - app-net
 
-  db:
-    container_name: ${APP_NAME:-app}_db
-    image: mariadb:11
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-root}
-      - MYSQL_DATABASE=${DB_DATABASE:-${APP_NAME:-app}_db}
-      - MYSQL_USER=${DB_USER:-app_user}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-app_password}
-    volumes:
-      - data-db:/var/lib/mysql
-      - ./app/Resources/db:/dumps
-    ports:
-      - ${DB_PORT:-3306}:3306
-    networks:
-      - app-net
-
-volumes:
-  data-db:
-    name: ${APP_NAME:-app}_db
-
 networks:
   app-net:
     name: ${APP_NAME:-app}_network
