@@ -5,9 +5,9 @@ namespace Tests\CashMachine\Application;
 use App\CashMachine\Application\DepositNotes;
 use App\CashMachine\Application\Withdraw;
 use App\CashMachine\Domain\CashMachine;
+use App\Note\Application\Exceptions\NotEnoughNotesException;
+use App\Note\Application\Exceptions\NoteUnavailableException;
 use App\Note\Domain\Note;
-use App\Note\Infrastructure\Exceptions\NotEnoughNotesException;
-use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

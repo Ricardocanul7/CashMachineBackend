@@ -3,9 +3,9 @@
 namespace App\CashMachine\Application;
 
 use App\CashMachine\Domain\CashMachine;
+use App\Note\Application\Exceptions\NoteUnavailableException;
 use App\Note\Domain\Factory\NoteFactory;
 use App\Note\Domain\Note;
-use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 use InvalidArgumentException;
 
 class Withdraw

@@ -2,7 +2,7 @@
 
 namespace App\Note\Domain;
 
-use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
+use App\Note\Application\Exceptions\NoteUnavailableException;
 use JsonSerializable;
 
 class Note implements JsonSerializable

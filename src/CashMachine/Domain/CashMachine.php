@@ -2,9 +2,8 @@
 
 namespace App\CashMachine\Domain;
 
+use App\Note\Application\Exceptions\NotEnoughNotesException;
 use App\Note\Domain\Note;
-use App\Note\Infrastructure\Exceptions\NotEnoughNotesException;
-use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 
 class CashMachine
 {
