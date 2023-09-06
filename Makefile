@@ -24,4 +24,8 @@ cli:	## Log into php container
 	${EXEC} bash
 
 test:	## Run tests
-	${EXEC} bin/phpunit
+	${EXEC} bin/phpunit --coverage-html coverage
+
+withdraw-cmd:	## Shortcut to run withdraw command
+	@read -p "Amount : " amount; \
+	${EXEC} bin/console cash-machine:withdraw $$amount
