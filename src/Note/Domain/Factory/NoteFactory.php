@@ -2,8 +2,8 @@
 
 namespace App\Note\Domain\Factory;
 
+use App\Note\Application\Exceptions\NoteUnavailableException;
 use App\Note\Domain\Note;
-use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 
 class NoteFactory
 {
