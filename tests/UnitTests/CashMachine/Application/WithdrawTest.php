@@ -47,6 +47,59 @@ class WithdrawTest extends KernelTestCase
         );
     }
 
+    public function testValidWithdrawWithAmount1200(): void
+    {
+        $this->cashMachine = $this->prepareCashMachine(new CashMachine());
+        $result = $this->withdrawService->__invoke(1200, $this->cashMachine);
+
+        $this->assertEquals(
+            [
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+            ],
+            $result
+        );
+    }
+
+    public function testValidWithdrawWithAmount1210(): void
+    {
+        $this->cashMachine = $this->prepareCashMachine(new CashMachine());
+        $result = $this->withdrawService->__invoke(1210, $this->cashMachine);
+
+        $this->assertEquals(
+            [
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(10),
+            ],
+            $result
+        );
+    }
+
     public function testUnavailableNoteWithdrawWithAmount125(): void
     {
         $this->cashMachine = $this->prepareCashMachine(new CashMachine());
@@ -79,6 +132,49 @@ class WithdrawTest extends KernelTestCase
 
         $this->expectException(NotEnoughNotesException::class);
         $this->withdrawService->__invoke(3000, $this->cashMachine);
+    }
+
+    public function testCashMachineReducingNumberOfNotes(): void
+    {
+        $this->cashMachine = $this->prepareCashMachine(new CashMachine());
+        $result = $this->withdrawService->__invoke(1000, $this->cashMachine);
+
+        $this->assertEquals(
+            [
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+                new Note(100),
+            ],
+            $result
+        );
+
+        $result = $this->withdrawService->__invoke(500, $this->cashMachine);
+
+        $this->assertEquals(
+            [
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+                new Note(50),
+            ],
+            $result
+        );
+
+        $this->expectException(NotEnoughNotesException::class);
+        $result = $this->withdrawService->__invoke(500, $this->cashMachine);
     }
 
     private function prepareCashMachine(CashMachine $cashMachine): CashMachine

@@ -3,6 +3,7 @@
 namespace App\CashMachine\Application;
 
 use App\CashMachine\Domain\CashMachine;
+use App\Note\Application\Exceptions\NotEnoughNotesException;
 use App\Note\Application\Exceptions\NoteUnavailableException;
 use App\Note\Domain\Factory\NoteFactory;
 use App\Note\Domain\Note;
@@ -27,7 +28,7 @@ class Withdraw
             throw new \InvalidArgumentException();
         }
 
-        $notesToWithdraw = $this->computeNotesToWithdraw($amount);
+        $notesToWithdraw = $this->computeNotesToWithdraw($amount, $cashMachine);
 
         return $cashMachine->removeNotes($notesToWithdraw);
     }
@@ -35,32 +36,30 @@ class Withdraw
     /**
      * @return Note[]
      */
-    private function computeNotesToWithdraw(int $amount): array
+    private function computeNotesToWithdraw(int $amount, CashMachine $cashMachine): array
     {
-        $availableNotesValues = Note::AVAILABLE_NOTES;
-        rsort($availableNotesValues, SORT_REGULAR);
+        $availableNoteCount = CashMachine::getNoteCount($cashMachine->getNotes());
+        krsort($availableNoteCount);
 
-        $remainder = $amount;
         $notesToWithdraw = [];
+        $remainder = $amount;
+        $lastNoteValue = 0;
 
-        foreach ($availableNotesValues as $key => $noteValue) {
-            if ($amount >= $noteValue) {
-                $notesQuantity = intdiv($remainder, $noteValue);
-
-                $notesToWithdraw = array_merge(
-                    $notesToWithdraw,
-                    $this->noteFactory->create($noteValue, $notesQuantity)
-                );
-
-                $notesMod = $remainder % $noteValue;
-                $remainder -= $notesQuantity * $noteValue;
-            }
-
-            if ($key === count($availableNotesValues) - 1) {
-                if (0 !== $notesMod) {
-                    throw new NoteUnavailableException();
+        foreach ($availableNoteCount as $noteValue => $noteCount) {
+            for ($i = 0; $i < $noteCount; ++$i) {
+                if ($remainder >= $noteValue) {
+                    $remainder -= $noteValue;
+                    $notesToWithdraw[] = new Note($noteValue);
                 }
             }
+            $lastNoteValue = $noteValue;
+        }
+
+        if ($remainder > 0) {
+            if ($remainder > $lastNoteValue) {
+                throw new NotEnoughNotesException();
+            }
+            throw new NoteUnavailableException();
         }
 
         return $notesToWithdraw;

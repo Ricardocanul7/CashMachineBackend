@@ -35,8 +35,8 @@ class CashMachine
      */
     public function removeNotes(array $notes): array
     {
-        $withdrawNotesCount = $this->getNoteCount($notes);
-        $availableNotesCount = $this->getNoteCount($this->notes);
+        $withdrawNotesCount = self::getNoteCount($notes);
+        $availableNotesCount = self::getNoteCount($this->notes);
 
         if (!$this->areEnoughNotesAvailable($withdrawNotesCount, $availableNotesCount)) {
             throw new NotEnoughNotesException();
@@ -59,9 +59,6 @@ class CashMachine
             unset($tempAvailableNotesForRemoval[$keyRemoval]);
         }
 
-        // Uncomment to watch if notes are removed correctly
-        // var_dump($this->getNoteCount($tempAvailableNotesForRemoval));
-
         $this->notes = $tempAvailableNotesForRemoval;
     }
 
@@ -79,7 +76,7 @@ class CashMachine
     /**
      * @param Note[] $notes
      */
-    private function getNoteCount(array $notes): array
+    public static function getNoteCount(array $notes): array
     {
         $noteValues = array_map(fn ($item) => $item->getValue(), $notes);
 
