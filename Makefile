@@ -26,6 +26,12 @@ cli:	## Log into php container
 test:	## Run tests
 	${EXEC} bin/phpunit --coverage-html coverage
 
+check-csfix:
+	${EXEC} vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes --dry-run
+
+csfix:
+	${EXEC} vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes
+
 withdraw-cmd:	## Shortcut to run withdraw command
 	@read -p "Amount : " amount; \
 	${EXEC} bin/console cash-machine:withdraw $$amount
