@@ -8,7 +8,6 @@ use App\CashMachine\Domain\CashMachine;
 use App\Note\Application\Exceptions\NotEnoughNotesException;
 use App\Note\Application\Exceptions\NoteUnavailableException;
 use App\Note\Domain\Note;
-use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class WithdrawTest extends KernelTestCase
@@ -60,14 +59,14 @@ class WithdrawTest extends KernelTestCase
     {
         $this->cashMachine = $this->prepareCashMachine(new CashMachine());
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->withdrawService->__invoke(-130, $this->cashMachine);
     }
 
     public function testWithdrawWithEmptyAmout(): void
     {
         $this->cashMachine = $this->prepareCashMachine(new CashMachine());
-        $resultWithNull = $this->withdrawService->__invoke(NULL, $this->cashMachine);
+        $resultWithNull = $this->withdrawService->__invoke(null, $this->cashMachine);
         $resultWithZero = $this->withdrawService->__invoke(0, $this->cashMachine);
 
         $this->assertEmpty($resultWithNull);

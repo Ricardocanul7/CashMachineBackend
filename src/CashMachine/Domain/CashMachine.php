@@ -7,7 +7,7 @@ use App\Note\Domain\Note;
 
 class CashMachine
 {
-    /** @var Note[] $notes */
+    /** @var Note[] */
     private array $notes = [];
 
     public function addNote(Note $note): void
@@ -21,8 +21,8 @@ class CashMachine
     }
 
     /**
-     * Get the value of notes
-     * 
+     * Get the value of notes.
+     *
      * @return Note[]
      */
     public function getNotes(): array
@@ -82,6 +82,7 @@ class CashMachine
     private function getNoteCount(array $notes): array
     {
         $noteValues = array_map(fn ($item) => $item->getValue(), $notes);
+
         return array_count_values($noteValues);
     }
 }

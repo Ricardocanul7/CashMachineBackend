@@ -3,16 +3,15 @@
 namespace App\Note\Domain;
 
 use App\Note\Application\Exceptions\NoteUnavailableException;
-use JsonSerializable;
 
-class Note implements JsonSerializable
+class Note implements \JsonSerializable
 {
     private int $value;
-    const AVAILABLE_NOTES = [10, 20, 50, 100];
+    public const AVAILABLE_NOTES = [10, 20, 50, 100];
 
-    public function __construct(int $value = NULL)
+    public function __construct(int $value = null)
     {
-        if(empty($value)){
+        if (empty($value)) {
             throw new NoteUnavailableException();
         }
 
@@ -23,9 +22,8 @@ class Note implements JsonSerializable
         $this->value = $value;
     }
 
-
     /**
-     * Get the value of value
+     * Get the value of value.
      */
     public function getValue(): int
     {

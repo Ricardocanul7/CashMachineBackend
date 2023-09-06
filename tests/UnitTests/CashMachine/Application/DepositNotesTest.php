@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class DepositNotesTest extends KernelTestCase
 {
     private DepositNotes $depositNotesService;
-    
+
     protected function setUp(): void
     {
         self::bootKernel();
@@ -30,7 +30,7 @@ class DepositNotesTest extends KernelTestCase
                 new Note(100),
                 new Note(100),
                 new Note(100),
-                new Note(100)
+                new Note(100),
             ],
             $cashMachine->getNotes()
         );

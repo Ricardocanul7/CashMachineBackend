@@ -6,7 +6,6 @@ use App\CashMachine\Domain\CashMachine;
 use App\Note\Application\Exceptions\NoteUnavailableException;
 use App\Note\Domain\Factory\NoteFactory;
 use App\Note\Domain\Note;
-use InvalidArgumentException;
 
 class Withdraw
 {
@@ -24,8 +23,8 @@ class Withdraw
             return [];
         }
 
-        if($amount < 0){
-            throw new InvalidArgumentException();
+        if ($amount < 0) {
+            throw new \InvalidArgumentException();
         }
 
         $notesToWithdraw = $this->computeNotesToWithdraw($amount);
@@ -58,7 +57,7 @@ class Withdraw
             }
 
             if ($key === count($availableNotesValues) - 1) {
-                if ($notesMod !== 0) {
+                if (0 !== $notesMod) {
                     throw new NoteUnavailableException();
                 }
             }

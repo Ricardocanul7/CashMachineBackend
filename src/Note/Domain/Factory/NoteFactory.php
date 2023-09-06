@@ -18,7 +18,7 @@ class NoteFactory
             throw new NoteUnavailableException();
         }
 
-        for ($i = 0; $i < $noteQuantity; $i++) {
+        for ($i = 0; $i < $noteQuantity; ++$i) {
             $notes[] = new Note($noteValue);
         }
 

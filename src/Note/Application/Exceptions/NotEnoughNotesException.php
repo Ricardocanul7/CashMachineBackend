@@ -2,9 +2,7 @@
 
 namespace App\Note\Application\Exceptions;
 
-use Exception;
-
-class NotEnoughNotesException extends Exception
+class NotEnoughNotesException extends \Exception
 {
     public function __construct()
     {
