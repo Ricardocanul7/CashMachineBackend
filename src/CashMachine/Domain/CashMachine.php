@@ -3,6 +3,7 @@
 namespace App\CashMachine\Domain;
 
 use App\Note\Domain\Note;
+use App\Note\Infrastructure\Exceptions\NotEnoughNotesException;
 use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
 
 class CashMachine
@@ -39,7 +40,7 @@ class CashMachine
         $availableNotesCount = $this->getNoteCount($this->notes);
 
         if (!$this->areEnoughNotesAvailable($withdrawNotesCount, $availableNotesCount)) {
-            throw new NoteUnavailableException();
+            throw new NotEnoughNotesException();
         }
 
         $this->persitNotesRemoval($notes);

@@ -6,6 +6,7 @@ use App\CashMachine\Domain\CashMachine;
 use App\Note\Domain\Factory\NoteFactory;
 use App\Note\Domain\Note;
 use App\Note\Infrastructure\Exceptions\NoteUnavailableException;
+use InvalidArgumentException;
 
 class Withdraw
 {
@@ -17,10 +18,14 @@ class Withdraw
     /**
      * @return Note[]
      */
-    public function __invoke(int $amount, CashMachine $cashMachine): array
+    public function __invoke(?int $amount, CashMachine $cashMachine): array
     {
         if (empty($amount)) {
             return [];
+        }
+
+        if($amount < 0){
+            throw new InvalidArgumentException();
         }
 
         $notesToWithdraw = $this->computeNotesToWithdraw($amount);

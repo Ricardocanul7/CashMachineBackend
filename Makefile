@@ -21,4 +21,7 @@ docker-down:	## Stop docker services for the project
 	${COMPOSE} down
 
 cli:	## Log into php container
-	${COMPOSE} exec -u 1000 php bash
+	${EXEC} bash
+
+test:	## Run tests
+	${EXEC} bin/phpunit

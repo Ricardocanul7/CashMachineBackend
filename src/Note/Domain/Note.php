@@ -10,8 +10,12 @@ class Note implements JsonSerializable
     private int $value;
     const AVAILABLE_NOTES = [10, 20, 50, 100];
 
-    public function __construct(int $value)
+    public function __construct(int $value = NULL)
     {
+        if(empty($value)){
+            throw new NoteUnavailableException();
+        }
+
         if (!self::checkAvailableValue($value)) {
             throw new NoteUnavailableException();
         }
