@@ -7,6 +7,7 @@ use App\Note\Application\Exceptions\NotEnoughNotesException;
 use App\Note\Application\Exceptions\NoteUnavailableException;
 use App\Note\Domain\Factory\NoteFactory;
 use App\Note\Domain\Note;
+use DateTime;
 
 class Withdraw
 {
@@ -18,7 +19,7 @@ class Withdraw
     /**
      * @return Note[]
      */
-    public function __invoke(?int $amount, CashMachine $cashMachine): array
+    public function __invoke(?int $amount, string $day, CashMachine $cashMachine): array
     {
         if (empty($amount)) {
             return [];
@@ -28,7 +29,7 @@ class Withdraw
             throw new \InvalidArgumentException();
         }
 
-        $notesToWithdraw = $this->computeNotesToWithdraw($amount, $cashMachine);
+        $notesToWithdraw = $this->computeNotesToWithdraw($amount, $day, $cashMachine);
 
         return $cashMachine->removeNotes($notesToWithdraw);
     }
@@ -36,10 +37,12 @@ class Withdraw
     /**
      * @return Note[]
      */
-    private function computeNotesToWithdraw(int $amount, CashMachine $cashMachine): array
+    private function computeNotesToWithdraw(int $amount, string $date, CashMachine $cashMachine): array
     {
         $availableNoteCount = CashMachine::getNoteCount($cashMachine->getNotes());
-        krsort($availableNoteCount);
+        $date = DateTime::createFromFormat('Y-m-d', $date);
+        $this->orderByDayOfTheWeek($date->format('w'), $availableNoteCount);
+        // krsort($availableNoteCount);
 
         $notesToWithdraw = [];
         $remainder = $amount;
@@ -63,5 +66,36 @@ class Withdraw
         }
 
         return $notesToWithdraw;
+    }
+
+
+
+    public function orderByDayOfTheWeek(int $day, &$noteCount): void
+    {
+        switch($day){
+            case 0: 
+                arsort($noteCount);
+                break;
+            case 1:
+                krsort($noteCount);
+                break;
+            case 2:
+                krsort($noteCount);
+                break;
+            case 3:
+                krsort($noteCount);
+                break;
+            case 4:
+                krsort($noteCount);
+                break;
+            case 5:
+                krsort($noteCount);
+                break;
+            case 6:
+                arsort($noteCount);
+                break;
+            default:
+                // Throw exception NonExistatAvailableDay
+        }
     }
 }

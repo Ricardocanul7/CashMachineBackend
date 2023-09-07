@@ -31,7 +31,11 @@ class WithdrawCommand extends Command
             ->addArgument(
                 'amount',
                 InputArgument::REQUIRED
-            );
+            )
+            ->addArgument(
+                'date',
+                InputArgument::REQUIRED
+            );;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -40,7 +44,11 @@ class WithdrawCommand extends Command
         $readyCashMachine = $this->prepareCashMachine($emptyCashMachine);
 
         try {
-            $result = $this->withdrawService->__invoke($input->getArgument('amount'), $readyCashMachine);
+            $result = $this->withdrawService->__invoke(
+                $input->getArgument('amount'),
+                $input->getArgument('date'),
+                $readyCashMachine
+            );
             $output->writeln(json_encode($result));
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
